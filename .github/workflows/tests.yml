@@ -1,14 +1,13 @@
 name: Tests
 
 on:
-  push:
-    branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+  workflow_call:
 
 jobs:
   tests:
-    name: Run tests
+    name: Run Tests
     
     runs-on: ubuntu-latest
 
