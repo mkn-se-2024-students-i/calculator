@@ -2,16 +2,19 @@ name: Release
 
 on:
   push:
-    branches: [ "master", "lie/test-ci" ]
+    branches: [ "master" ]
 
 jobs:
   run_tests:
     uses: ./.github/workflows/tests.yml
+    name: Run Tests
 
   build_web:
     uses: ./.github/workflows/build_web.yml
+    name: Build Web
   
-  release:
+  release_gh:
+    name: Release to GitHub Releases
     needs: [run_tests, build_web]
     runs-on: ubuntu-latest
     permissions: write-all
@@ -19,11 +22,13 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: dist
+          path: dist
 
       - run: |
-          git_hash=$(git rev-parse --short "$GITHUB_SHA")
-          gh release create git_hash
-          gh release upload git_hash dist
+          TAG=$GITHUB_REF_NAME-${GITHUB_SHA:0:7}
+          gh release create $TAG --repo $GITHUB_REPOSITORY
+          tar -cf dist.tar dist
+          gh release upload $TAG dist.tar --repo $GITHUB_REPOSITORY
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         name: Create Release
