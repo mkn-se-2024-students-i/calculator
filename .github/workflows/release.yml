@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  push:
+    branches: [ "master", "lie/test-ci" ]
+
+jobs:
+  run_tests:
+    uses: ./.github/workflows/tests.yml
+
+  build_web:
+    uses: ./.github/workflows/build_web.yml
+  
+  release:
+    needs: [run_tests, build_web]
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+
+      - run: |
+          git_hash=$(git rev-parse --short "$GITHUB_SHA")
+          gh release create git_hash
+          gh release upload git_hash dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: Create Release
