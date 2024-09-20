@@ -5,7 +5,10 @@
   "scripts": {
     "list": "node -e 'console.log(os.networkInterfaces())'",
     "hot": "node main.js hot",
-    "cold": "node main.js cold"
+    "cold": "node main.js cold",
+    "docker:build:hot": "node docker_launcher.js build hot",
+    "docker:build:cold": "node docker_launcher.js build cold",
+    "docker": "node docker_launcher.js run"
   },
   "author": "",
   "license": "ISC",

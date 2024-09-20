@@ -44,7 +44,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          curl -X POST http://$WEBSERVER_IP:$WEBSERVER_PORT/$WEBSERVER_RELEASE
+          if [[ ! -z "$WEBSERVER_IP" && ! -z "$WEBSERVER_PORT" && ! -z "$WEBSERVER_RELEASE" ]]; then
+            curl -X POST http://$WEBSERVER_IP:$WEBSERVER_PORT/$WEBSERVER_RELEASE;
+          fi
         env:
           WEBSERVER_IP: ${{ secrets.WEBSERVER_IP }}
           WEBSERVER_PORT: ${{ secrets.WEBSERVER_PORT }}

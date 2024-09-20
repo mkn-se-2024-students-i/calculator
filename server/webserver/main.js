@@ -1,7 +1,6 @@
-// Todo: wrap in docker or similar
-
 const fs = require('fs')
 const path = require('path')
+const os = require('os')
 const child_process = require('child_process')
 const { writeFile } = require('fs/promises')
 const { Readable } = require('stream')
@@ -9,7 +8,11 @@ const { Readable } = require('stream')
 const app = require('express')()
 
 const config = require('./config')
-const secrets = require('./secrets')
+const secrets = process.argv[2] == 'docker' ? {
+    ip: process.argv[3],
+    port: process.argv[4],
+    publishReleaseString: process.argv[5],
+} : require('./secrets')
 const isHot = process.argv[process.argv.length - 1] == 'hot'
 
 const appDir = path.join(__dirname, 'app')
@@ -43,6 +46,8 @@ async function main() {
     app.get('/*', (req, res) => {
         const reqPath = `.${req.path == '/' ? '/index.html' : req.path}`
         const filePath = path.join(currentDistDir, reqPath)
+        console.log(filePath)
+        console.log(fs.readdirSync(path.join(filePath, '..')))
         if (!fs.existsSync(path.join(currentDistDir, reqPath))) {
             res.sendStatus(404)
             return
@@ -60,9 +65,14 @@ async function main() {
         })
     }
 
-    app.listen(secrets.port, secrets.ip, () => {
-        console.log(`The server is running on http://${secrets.ip}:${secrets.port}`)
-    })
+    if (process.argv[2] !== 'docker') {
+        app.listen(secrets.port, secrets.ip, () => {
+            console.log(`The server is running on http://${secrets.ip}:${secrets.port}`)
+        })
+    } else {
+        const interfaces = os.networkInterfaces()
+        app.listen(secrets.port, interfaces.eth0[0].address)
+    }
 }
 
 main()
