@@ -10,7 +10,7 @@ if __name__ == "__main__":
     print(
         f"""ATTENTION!
           this script drops current table
-          typw \"{AGREE_RESPONSE}\" to continue
+          type \"{AGREE_RESPONSE}\" to continue
           """
     )
     response = input()
