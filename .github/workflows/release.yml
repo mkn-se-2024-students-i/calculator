@@ -3,6 +3,11 @@ name: Release
 on:
   push:
     branches: [ "master" ]
+    secrets:
+      WEBSERVER_IP:
+        required: true
+      WEBSERVER_RELEASE:
+        required: true
 
 jobs:
   run_tests:
@@ -32,3 +37,16 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         name: Create Release
+  
+  trigger_webserver_update:
+    name: Trigger Webserver Update
+    needs: [release_gh]
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -X POST http://$WEBSERVER_IP:$WEBSERVER_PORT/$WEBSERVER_RELEASE
+        env:
+          WEBSERVER_IP: ${{ secrets.WEBSERVER_IP }}
+          WEBSERVER_PORT: ${{ secrets.WEBSERVER_PORT }}
+          WEBSERVER_RELEASE: ${{ secrets.WEBSERVER_RELEASE }}
+        name: Trigger Webserver Update

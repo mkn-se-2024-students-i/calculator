@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Host for calculator application frontend",
   "scripts": {
+    "list": "node -e 'console.log(os.networkInterfaces())'",
     "hot": "node main.js hot",
     "cold": "node main.js cold"
   },

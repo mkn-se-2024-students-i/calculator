@@ -9,13 +9,14 @@ const { Readable } = require('stream')
 const app = require('express')()
 
 const config = require('./config')
+const secrets = require('./secrets')
 const isHot = process.argv[process.argv.length - 1] == 'hot'
 
 const appDir = path.join(__dirname, 'app')
 var currentDistDir = undefined
 
 async function downloadDist(tag) {
-    const response = await fetch(config.distURL.replace('TAG', tag));
+    const response = await fetch(config.distURL.replace('TAG_PLACEHOLDER', tag));
     const stream = Readable.fromWeb(response.body)
     await writeFile(path.join(appDir, `${tag}.tar`), stream)
     const newDistDir = fs.mkdtempSync(path.join(appDir, `${tag}-`))
@@ -50,16 +51,17 @@ async function main() {
     })
 
     if (isHot) {
-        app.post(`/${require('./secrets').publishReleaseString}`, async () => {
+        app.post(`/${secrets.publishReleaseString}`, async (req, res) => {
             const tagsList = await (await fetch(config.tagsListURL)).json()
             const latest = tagsList[0].name
 
             await downloadDist(latest)
+            res.sendStatus(200)
         })
     }
 
-    app.listen(config.port, config.ip, () => {
-        console.log(`The server is running on http://${config.ip}:${config.port}`)
+    app.listen(secrets.port, secrets.ip, () => {
+        console.log(`The server is running on http://${secrets.ip}:${secrets.port}`)
     })
 }
 
