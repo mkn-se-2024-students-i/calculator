@@ -65,7 +65,7 @@ async function main() {
         })
     }
 
-    if (process.argv[2] !== 'docker') {
+    if (process.argv[2] != 'docker') {
         app.listen(secrets.port, secrets.ip, () => {
             console.log(`The server is running on http://${secrets.ip}:${secrets.port}`)
         })
