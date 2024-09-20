@@ -5,3 +5,6 @@ build
 out
 
 *secret*
+*.env
+
+*__pycache__*
