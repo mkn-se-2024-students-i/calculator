@@ -13,7 +13,7 @@ RUN npm i
 CMD node main.js docker ${secrets.ip} ${secrets.port} ${secrets.publishReleaseString} ${process.argv[3]}
 EXPOSE ${secrets.port}
 `)
-    child_process.execSync(`sudo docker build -t webserver .`, { stdio: 'inherit'})
+    child_process.execSync(`sudo docker build -t webserver .`, { stdio: 'inherit' })
 } else if (process.argv[2] == 'run') {
     child_process.execSync(`sudo docker run -dp ${secrets.ip}:${secrets.port}:${secrets.port} webserver`, { stdio: 'inherit' })
 }
