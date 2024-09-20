@@ -2,12 +2,7 @@ name: Release
 
 on:
   push:
-    branches: [ "master", "lie/webserver" ]
-    secrets:
-      WEBSERVER_IP:
-        required: true
-      WEBSERVER_RELEASE:
-        required: true
+    branches: [ "master" ]
 
 jobs:
   run_tests:
