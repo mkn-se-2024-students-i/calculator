@@ -1,0 +1,14 @@
+{
+  "name": "calculator-webserver",
+  "version": "1.0.0",
+  "description": "Host for calculator application frontend",
+  "scripts": {
+    "hot": "node main.js hot",
+    "cold": "node main.js cold"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.21.0"
+  }
+}
