@@ -1,5 +1,6 @@
 {
   "name": "calculator-webserver",
+  "private": "true",
   "version": "1.0.0",
   "description": "Host for calculator application frontend",
   "scripts": {
