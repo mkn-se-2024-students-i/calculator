@@ -75,19 +75,17 @@ async function main() {
             logReq(req)
 
             var now = Date.now()
-            if (now > prevUpdate + config.minUpdateFreq) {
-                const tagsList = await (await fetch(config.tagsListURL)).json()
-                const latest = tagsList[0].name
-
-                try {
-                    await downloadDist(latest)
-                    prevUpdate = now
-                    res.sendStatus(200)
-                } catch {
-                    res.sendStatus(500)
-                }
-            } else {
+            if (now <= prevUpdate + config.minUpdateFreq) {
                 res.sendStatus(403)
+                return
+            }
+
+            try {
+                await downloadDist(latest)
+                prevUpdate = now
+                res.sendStatus(200)
+            } catch {
+                res.sendStatus(500)
             }
         })
     }

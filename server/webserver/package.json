@@ -11,8 +11,6 @@
     "docker:build:cold": "node docker_launcher.js build cold",
     "docker": "node docker_launcher.js run"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "express": "^4.21.0"
   }
