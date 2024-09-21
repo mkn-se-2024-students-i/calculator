@@ -11,6 +11,48 @@ const calculatorFormInput = calculatorForm.querySelector("input[name='calculator
 calculatorClearButton.addEventListener("click", removeLastCalculatorSymbol)
 calculatorFormInput.addEventListener("input", validateInput)
 
+const ws = new WebSocket("ws://0.0.0.0:5000");
+const global_user = "testUser"; //TODO: it is for tests, move it to localStorage
+
+ws.onopen = () => {
+  console.log("WebSocket connection opened");
+};
+
+ws.onmessage = (event) => {
+  const message = JSON.parse(event.data);
+  if (message.user == global_user) {
+    //TODO: handle functions result here
+    if (message.type == 'update') { // this is trigger from backend that in some tab you ask for eval and you need to update history
+      console.log("We need to update history list for this user");
+    } else if (message.type == "eval_expr") { // this is responce on evalExpr function
+      //TODO: should check somehow that it is answer for your expr
+      if (message.result != "error") {
+        console.log(message.result + " is valid result for expr = " + message.expr);
+      } else {
+        console.log("Got error while evaluate expr: " + message.error);
+      }
+    } else if (response.type == "get_history") { // this is responce on getHistory function
+      console.log("whole history for our user = " + response.result);
+    } else {
+      console.log("Unknown message type");
+    }
+  }
+};
+
+ws.onclose = () => {
+  console.log("WebSocket connection closed");
+};
+
+async function evalExpr(user, expr) {
+  const message = { type: "eval_expr", user: user, expr: expr };
+  ws.send(JSON.stringify(message));
+}
+
+async function getHistory(user) {
+  const message = { type: "get_history", user: user };
+  ws.send(JSON.stringify(message));
+}
+
 function removeLastCalculatorSymbol() {
   calculatorFormInput.value = calculatorFormInput.value.slice(0, -1)
   validateInput()
@@ -55,6 +97,7 @@ calculatorForm.addEventListener("submit", (e) => {
   e.preventDefault()
   if(!validateInput()) return
 
+  evalExpr(global_user, calculatorFormInput.value)
   calculatorFormInput.value = ''
 })
 

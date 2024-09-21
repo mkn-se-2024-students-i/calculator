@@ -7,23 +7,44 @@ from my_sql.common import (
     recreate_db,
 )
 
+import asyncio
+import websockets
+import json
+from evaluation.eval import evaluate_expression
+
 # TODO(vvsg): may be we should set it as arg
 THREADS_COUNT = 5
+
+async def handler(websocket):
+    global db_connections
+    async for message in websocket:
+        data = json.loads(message)
+        if data["type"] == "eval_expr":
+            user = data["user"]
+            expr = data["expr"]
+            result = evaluate_expression(expr)
+            write_new_result(user, expr, result, db_connections)
+            if result[1]:
+                await websocket.send(json.dumps({"type" : "eval_expr", "user": user, "expr": expr, "result" : result[0]}))
+                await websocket.send(json.dumps({"type": "update", "user": user, "data": "you need to update"}))
+            else:
+                await websocket.send(json.dumps({"type" : "eval_expr", "user": user, "result" : "error", "error" : result[0]}))
+        elif data["type"] == "get_history":
+            user = data["user"]
+            history = get_all_user_requests(user, db_connections)
+            await websocket.send(json.dumps({"type" : "get_history", "user": user, "result" : history}))
+        else:
+            await websocket.send(json.dumps({"user": user, "error": "Unknown message type"}))
+
+async def main():
+    async with websockets.serve(handler, "0.0.0.0", 5000):
+        await asyncio.Future()  # run forever
 
 if __name__ == "__main__":
     # loads environment variables from .env
     load_dotenv()
 
+    global db_connections
     db_connections = get_database_connections_pool(THREADS_COUNT)
 
-    # examples of usage
-    recreate_db(db_connections)
-    write_new_result("test_key1", "2 + 2", "4", db_connections)
-    write_new_result("test_key2", "2 + 3", "5", db_connections)
-    write_new_result("test_key2", "2 + 7", "9", db_connections)
-    # be careful! result from cache might be null
-    assert get_cached_request("2 + 2", db_connections) == "4"
-    assert len(get_all_user_requests("test_key1", db_connections)) == 1
-    assert len(get_all_user_requests("test_key2", db_connections)) == 2
-
-    print(*get_all_user_requests("test_key1", db_connections))
+    asyncio.run(main())
