@@ -29,10 +29,10 @@ async def handler(websocket):
                 await websocket.send(json.dumps({"type": "update", "user": user, "data": "you need to update"}))
             else:
                 await websocket.send(json.dumps({"type" : "eval_expr", "user": user, "result" : "error", "error" : result[0]}))
-        elif data["type"] == "update_history":
+        elif data["type"] == "get_history":
             user = data["user"]
             history = get_all_user_requests(user, db_connections)
-            await websocket.send(json.dumps({"type" : "update_history", "user": user, "result" : history}))
+            await websocket.send(json.dumps({"type" : "get_history", "user": user, "result" : history}))
         else:
             await websocket.send(json.dumps({"user": user, "error": "Unknown message type"}))
 

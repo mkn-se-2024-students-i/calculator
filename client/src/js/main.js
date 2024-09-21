@@ -21,15 +21,17 @@ ws.onopen = () => {
 ws.onmessage = (event) => {
   const message = JSON.parse(event.data);
   if (message.user == global_user) {
-    if (message.type === 'update') {
+    //TODO: handle functions result here
+    if (message.type == 'update') {// this is trigger from backend that in some tab you ask for eval and you need to update history
       console.log("We need to update history list for this user");
-    } else if (message.type == "eval_expr") {
+    } else if (message.type == "eval_expr") { // this is responce on evalExpr function
+      //TODO: should check somehow that it is answer for your expr
       if (message.result != "error") {
         console.log(message.result + " is valid result for expr = " + message.expr);
       } else {
         console.log("Got error while evaluate expr: " + message.error);
       }
-    } else if (response.type == "update_history") {
+    } else if (response.type == "get_history") { // this is responce on getHistory function
       console.log("whole history for our user = " + response.result);
     } else {
       console.log("Unknown message type");
@@ -46,8 +48,8 @@ async function evalExpr(user, expr) {
   ws.send(JSON.stringify(message));
 }
 
-async function updateHistory(user) {
-  const message = { type: "update_history", user: user };
+async function getHistory(user) {
+  const message = { type: "get_history", user: user };
   ws.send(JSON.stringify(message));
 }
 
