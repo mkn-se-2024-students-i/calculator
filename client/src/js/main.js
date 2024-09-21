@@ -11,6 +11,63 @@ const calculatorFormInput = calculatorForm.querySelector("input[name='calculator
 calculatorClearButton.addEventListener("click", removeLastCalculatorSymbol)
 calculatorFormInput.addEventListener("input", validateInput)
 
+const ws = new WebSocket("ws://localhost:8765");
+const global_user = "testUser"; //TODO: it is for tests, move it to localStorage
+
+ws.onopen = () => {
+  console.log("WebSocket connection opened");
+};
+
+default_onmessage = function(event) {
+  const message = JSON.parse(event.data);
+  console.log("Received message:", message);
+  if (message.type === 'update') {
+    if (message.user == global_user) {
+      console.log("We need to update history list for this user");
+    }
+  } else {
+    console.log("Unknown message type");
+  }
+};
+
+ws.onmessage = default_onmessage;
+
+ws.onclose = () => {
+  console.log("WebSocket connection closed");
+};
+
+async function evalExpr(user, expr) {
+  const message = { type: "eval_expr", user: user, expr: expr };
+  ws.send(JSON.stringify(message));
+  ws.onmessage = (event) => {
+    const response = JSON.parse(event.data);
+    if (response.type == "eval_expr") {
+      if (response.result != "error") {
+        console.log(response.result + " is valid result");
+      } else {
+        console.log("Got error while evaluate expr: " + response.error);
+      }
+    } else {
+      console.log("Unknown responce type for eval_expr");
+    }
+    ws.onmessage = default_onmessage;
+  }
+}
+
+async function updateHistory(user) {
+  const message = { type: "update_history", user: user };
+  ws.send(JSON.stringify(message));
+  ws.onmessage = (event) => {
+    const response = JSON.parse(event.data);
+    if (response.type == "update_history") {
+      console.log("whole history for our user = " + response.result);
+    } else {
+      console.log("Unknown responce type for update_history");
+    }
+    ws.onmessage = default_onmessage;
+  }
+}
+
 function removeLastCalculatorSymbol() {
   calculatorFormInput.value = calculatorFormInput.value.slice(0, -1)
   validateInput()
@@ -55,6 +112,7 @@ calculatorForm.addEventListener("submit", (e) => {
   e.preventDefault()
   if(!validateInput()) return
 
+  evalExpr(global_user, calculatorFormInput.value)
   calculatorFormInput.value = ''
 })
 

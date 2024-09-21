@@ -1,0 +1,36 @@
+i want to write websockets communication between python server and pure javascript client. Help me to write this.
+I want to have on server somethin like this (it is preudocode):
+```
+@socket.on('new_user')
+def add_new_user(json):
+    print('received json: ' + str(json))
+    return {"status": "after print received json in new_user"}
+
+@socket.on('eval_expr')
+def eval_expr(json):
+    print('received json: ' + str(json))
+    user = json['user']
+    print('user in received json: ' + user)
+    emit("update " + str(user), {'data': "you need to update"}, broadcast=True)
+    return {"status": "after print received json in eval_expr"}
+```
+
+and i need to have on javascript client something close to 
+```
+async function addNewUser(user) {
+    await socket.emit("new_user", {"user": user}, (response) => {
+        console.log("got response in addNewUser emit");
+        console.log(response);
+    });
+}
+
+async function evalExpr(user, expr) {
+    await socket.emit("eval_expr", {"user": user, "expr": expr}, (response) => {
+        console.log("got response in evalExpr emit");
+        console.log(response);
+    });
+}
+```
+
+of course, this is only an example. In client i don't want to use something like react, angular or node.js, just pure javascript
+and of course i want to save on/emit pattern for solving this problem
