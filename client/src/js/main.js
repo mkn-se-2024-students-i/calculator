@@ -118,3 +118,21 @@ calculatorDisplay.addEventListener('touchend', e => {
   touchendX = e.changedTouches[0].screenX
   checkDirection()
 })
+
+historyItems.forEach(item => {
+  item.addEventListener("click", () => {
+    const itemRequest = item.querySelector(".history__item-request")
+    calculatorFormInput.value = itemRequest.innerText
+    calculatorInputOnFocus()
+    
+    app.scrollTo({
+      top: 0,
+      left: screenHome.offsetLeft,
+      behavior: 'smooth'
+    })
+
+    setTimeout(() => {
+      calculatorFormInput.focus()
+    }, 1000)
+  })
+})
