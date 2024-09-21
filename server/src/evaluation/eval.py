@@ -2,12 +2,12 @@ import regex as re
 import math
 
 # TODO: add "sin", "cos", "tan", "e", "pi"
-_correct_elements_regexp = "([\* \- \+ \/ \d \s \. \^ \( \) \|]*(log)*(sqrt)*)*"
+_correct_elements_regexp = "([\× \- \+ \÷ \d \s \. \^ \( \)]*(log)*(sqrt)*)*"
 
-_operation_replacements = [("log", "math.log"), ("sqrt", "math.sqrt"), ("^", "**")]
+_operation_replacements = [("log", "math.log"), ("sqrt", "math.sqrt"), ("^", "**"), ("×", "*"), ("÷", "/") ]
 
 _invalid_string = "inval"
-_invalid_patterns = ["\+\s*\+", "-\s*-", "\*\s*\*", "/\s*/"]
+_invalid_patterns = ["\+\s*\+", "-\s*-", "\×\s*\×", "÷\s*÷"]
 
 def _check_arithmetic_expression(expr: str) -> bool:
 	return re.fullmatch(_correct_elements_regexp, expr) != None
