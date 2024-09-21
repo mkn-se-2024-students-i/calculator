@@ -1,55 +1,57 @@
 @-webkit-keyframes gradientAnimation {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
+    0% {  background-position:  0% 50% }
+    50% {  background-position:  100% 50% }
+    100% {  background-position:  0% 50% }
 }
+
 @-moz-keyframes gradientAnimation {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
 }
+
 @keyframes gradientAnimation { 
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
 }
 
 @keyframes moveCircles {
-    0% { transform: translate(-50%, -50%); }
-    50% { transform: translate(50%, 50%); }
-    100% { transform: translate(-50%, -50%); }
+    0% { transform: translate(-50%, -50%) }
+    50% { transform: translate(50%, 50%) }
+    100% { transform: translate(-50%, -50%) }
 }
 
 @keyframes moveInCircle1 {
-    0% { transform: translate(0, 0); }
-    25% { transform: translate(30px, -50px); }
-    50% { transform: translate(-60px, 30px); }
-    75% { transform: translate(30px, 60px); }
-    100% { transform: translate(0, 0); }
+    0% { transform: translate(0, 0) }
+    25% { transform: translate(30px, -50px) }
+    50% { transform: translate(-60px, 30px) }
+    75% { transform: translate(30px, 60px) }
+    100% { transform: translate(0, 0) }
 }
 
 @keyframes moveInCircle2 {
-    0% { transform: translate(0, 0); }
-    25% { transform: translate(-50px, 30px); }
-    50% { transform: translate(60px, -30px); }
-    75% { transform: translate(-30px, -60px); }
-    100% { transform: translate(0, 0); }
+    0% { transform: translate(0, 0) }
+    25% { transform: translate(-50px, 30px) }
+    50% { transform: translate(60px, -30px) }
+    75% { transform: translate(-30px, -60px) }
+    100% { transform: translate(0, 0) }
 }
 
 @keyframes moveInCircle3 {
-    0% { transform: translate(0, 0); }
-    25% { transform: translate(20px, 40px); }
-    50% { transform: translate(-40px, -20px); }
-    75% { transform: translate(40px, -40px); }
-    100% { transform: translate(0, 0); }
+    0% { transform: translate(0, 0) }
+    25% { transform: translate(20px, 40px) }
+    50% { transform: translate(-40px, -20px) }
+    75% { transform: translate(40px, -40px) }
+    100% { transform: translate(0, 0) }
 }
 
 @keyframes moveInCircle4 {
-    0% { transform: translate(0, 0); }
-    25% { transform: translate(-60px, 40px); }
-    50% { transform: translate(40px, -40px); }
-    75% { transform: translate(-40px, 60px); }
-    100% { transform: translate(0, 0); }
+    0% { transform: translate(0, 0) }
+    25% { transform: translate(-60px, 40px) }
+    50% { transform: translate(40px, -40px) }
+    75% { transform: translate(-40px, 60px) }
+    100% { transform: translate(0, 0) }
 }
 
 .body::before, .body::after {
@@ -69,8 +71,7 @@
     animation-direction: reverse;
 }
 
-
-.circle-container{
+.circle-container {
     max-width: 1920px;
     width: 100%;
     height: 100dvh;
@@ -103,7 +104,7 @@
     top: 60%;
     left: 25%;
     animation: moveInCircle2 25s ease-in-out infinite alternate-reverse;
-        background: rgb(107,7,217);
+    background: rgb(107,7,217);
     background: linear-gradient(90deg, rgba(107,7,217,1) 0%, rgba(126,15,142,1) 100%);
     -webkit-box-shadow:0px 0px 92px 6px rgba(162,0,255,0.35);
     -moz-box-shadow: 0px 0px 92px 6px rgba(162,0,255,0.35);
@@ -115,7 +116,7 @@
     top: 40%;
     left: 70%;
     animation: moveInCircle3 30s ease-in-out infinite alternate;
-        background: rgb(107,7,217);
+    background: rgb(107,7,217);
     background: linear-gradient(90deg, rgba(107,7,217,1) 0%, rgba(126,15,142,1) 100%);
     -webkit-box-shadow:0px 0px 92px 6px rgba(162,0,255,0.35);
     -moz-box-shadow: 0px 0px 92px 6px rgba(162,0,255,0.35);
@@ -127,7 +128,7 @@
     top: 80%;
     left: 50%;
     animation: moveInCircle4 35s ease-in-out infinite alternate-reverse;
-        background: rgb(107,7,217);
+    background: rgb(107,7,217);
     background: linear-gradient(90deg, rgba(107,7,217,1) 0%, rgba(126,15,142,1) 100%);
     -webkit-box-shadow:0px 0px 92px 6px rgba(162,0,255,0.35);
     -moz-box-shadow: 0px 0px 92px 6px rgba(162,0,255,0.35);

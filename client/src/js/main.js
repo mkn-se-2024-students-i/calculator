@@ -1,6 +1,7 @@
 const app = document.getElementById("app")
 const btnScreenScrollers = document.querySelectorAll(".screen__btn")
 const historyItems = document.querySelectorAll(".history__item")
+const screenHome = document.querySelector(".screen_home") 
 
 const calculatorForm = document.querySelector(".calculator-form")
 const calculatorButtons = document.querySelectorAll(".calculator__button[data-button-symbol]")
@@ -10,6 +11,14 @@ const calculatorFormInput = calculatorForm.querySelector("input[name='calculator
 calculatorClearButton.addEventListener("click", removeLastCalculatorSymbol)
 calculatorFormInput.addEventListener("input", validateInput)
 
+function removeLastCalculatorSymbol() {
+  calculatorFormInput.value = calculatorFormInput.value.slice(0, -1)
+}
+
+function calculatorInputOnFocus() {
+  calculatorFormInput.scrollLeft = calculatorFormInput.scrollWidth
+}
+
 btnScreenScrollers.forEach(btn => {
   const screenScrollTo = document.querySelector(`.${btn.dataset.scrollTo}`) 
 
@@ -18,38 +27,30 @@ btnScreenScrollers.forEach(btn => {
         top: 0,
         left: screenScrollTo.offsetLeft,
         behavior: 'smooth'
-    });
+    })
   })
-});
-
-function removeLastCalculatorSymbol(){
-  calculatorFormInput.value = calculatorFormInput.value.slice(0, -1)
-}
+})
 
 calculatorButtons.forEach(btn => {
-  btn.addEventListener("click", () =>{
+  btn.addEventListener("click", () => {
     calculatorFormInput.value += btn.dataset.buttonSymbol
-    calculatorFormInput.scrollLeft = calculatorFormInput.scrollWidth
+    calculatorInputOnFocus()
     validateInput()
   })
-});
+})
 
-calculatorFormInput.addEventListener("keydown", (e)=>{
-  switch (e.code) {
-    case 'NumpadDivide' || 'Slash':
-      calculatorFormInput.value += '÷'
-      break;
-    case 'NumpadMultiply':
-      calculatorFormInput.value += '×'
-      break;
-    
-    default:
-      break;
+calculatorFormInput.addEventListener("keydown", (e) => {
+  if (e.code === "NumpadDivide" || e.code === "Slash") {
+    calculatorFormInput.value += '÷'
   }
+  if (e.code === "NumpadMultiply" || (e.code === "Digit8" && e.shiftKey)) {
+    calculatorFormInput.value += '×'
+  }
+
   validateInput()
 })
 
-calculatorForm.addEventListener("submit", (e) =>{
+calculatorForm.addEventListener("submit", (e) => {
   e.preventDefault()
   validateInput()
 
@@ -57,48 +58,47 @@ calculatorForm.addEventListener("submit", (e) =>{
 })
 
 function validateInput() {
-  const input = calculatorFormInput.value;
-  const validPattern = /^[0-9+\-×÷/(). ]*$/;
+  const input = calculatorFormInput.value
+  const validPattern = /^[0-9+\-×÷/(). ]*$/
 
-  if(input.length == 0){
-    console.log('null string');
-    return false;
+  if(input.length == 0) {
+    console.log('null string')
+    return false
   }
 
   if (/^[+\×\÷/).]/.test(input)) {
     removeLastCalculatorSymbol()
-    console.log('First symbol cannot be an operator or closed parentheses or dot, except for minus (-).');
-    return false;
+    console.log('First symbol cannot be an operator or closed parentheses or dot, except for minus (-).')
+    return false
   }
 
   if (!validPattern.test(input)) {
-    // removeLastCalculatorSymbol()
-    input.match(validPattern)
-    console.log('Invalid input! Please use only numbers and valid operators (+, -, ×, ÷).');
-    return false;
+    removeLastCalculatorSymbol()
+    console.log('Invalid input! Please use only numbers and valid operators (+, -, ×, ÷).')
+    return false
   }
 
   if (/[\+\-\×\÷\/]{2,}/.test(input)) {
     removeLastCalculatorSymbol()
-    console.log('Invalid sequence of operators!');
-    return false;
+    console.log('Invalid sequence of operators!')
+    return false
   }
 
-  const numberWithDots = input.split(/[\+\-\×\/\(\)\s]/);
-  const lastPartOfNumberWithDots = numberWithDots[numberWithDots.length - 1];
+  const numberWithDots = input.split(/[\+\-\×\/\(\)\s]/)
+  const lastPartOfNumberWithDots = numberWithDots[numberWithDots.length - 1]
 
   if (lastPartOfNumberWithDots.split('.').length > 2) {
     removeLastCalculatorSymbol()
-    console.log('A number cannot have more than one dot.');
-    return false;
+    console.log('A number cannot have more than one dot.')
+    return false
   }
 
-  const openParentheses = (input.match(/\(/g) || []).length;
-  const closeParentheses = (input.match(/\)/g) || []).length;
+  const openParentheses = (input.match(/\(/g) || []).length
+  const closeParentheses = (input.match(/\)/g) || []).length
 
   if (openParentheses !== closeParentheses) {
     console.log('Invalid sequence of parentheses!')
-    return false;
+    return false
   }
 }
 
