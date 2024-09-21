@@ -11,7 +11,7 @@ const calculatorFormInput = calculatorForm.querySelector("input[name='calculator
 calculatorClearButton.addEventListener("click", removeLastCalculatorSymbol)
 calculatorFormInput.addEventListener("input", validateInput)
 
-const ws = new WebSocket("ws://localhost:8765");
+const ws = new WebSocket("ws://0.0.0.0:5000");
 const global_user = "testUser"; //TODO: it is for tests, move it to localStorage
 
 ws.onopen = () => {

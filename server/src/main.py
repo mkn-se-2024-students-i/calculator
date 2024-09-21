@@ -31,13 +31,13 @@ async def handler(websocket):
                 await websocket.send(json.dumps({"type" : "eval_expr", "result" : "error", "error" : result[0]}))
         elif data["type"] == "update_history":
             user = data["user"]
-            history = list("temp_string_for_history1", "temp_string_for_history2") # get_all_user_requests(user, db_connections)
+            history = get_all_user_requests(user, db_connections)
             await websocket.send(json.dumps({"type" : "update_history", "result" : history}))
         else:
             await websocket.send(json.dumps({"error": "Unknown message type"}))
 
 async def main():
-    async with websockets.serve(handler, "localhost", 8765):
+    async with websockets.serve(handler, "0.0.0.0", 5000):
         await asyncio.Future()  # run forever
 
 if __name__ == "__main__":
