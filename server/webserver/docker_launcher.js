@@ -9,7 +9,7 @@ if (hasArg('build')) {
     fs.writeFileSync('Dockerfile', `
 FROM node:22-alpine
 WORKDIR .
-COPY ./package.json ./package-lock.json ./main.js ./config.js ./args_parser.js ./
+COPY ./package.json ./package-lock.json ./main.js ./config.js ./args_parser.js ./logger.js ./
 RUN npm i
 CMD node main.js docker ${secrets.ip} ${secrets.port} ${secrets.publishReleaseString} ${hasArg('hot') ? 'hot' : 'cold'}
 EXPOSE ${secrets.port}
