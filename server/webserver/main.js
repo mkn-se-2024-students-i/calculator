@@ -50,6 +50,10 @@ async function main() {
             res.sendStatus(404)
             return
         }
+        if (!fs.statSync(path.join(currentDistDir, reqPath)).isFile) {
+            res.sendStatus(403)
+            return
+        }
         res.sendFile(filePath)
     })
 
