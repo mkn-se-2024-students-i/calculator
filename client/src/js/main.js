@@ -13,6 +13,7 @@ calculatorFormInput.addEventListener("input", validateInput)
 
 function removeLastCalculatorSymbol() {
   calculatorFormInput.value = calculatorFormInput.value.slice(0, -1)
+  validateInput()
 }
 
 function calculatorInputOnFocus() {
@@ -52,7 +53,7 @@ calculatorFormInput.addEventListener("keydown", (e) => {
 
 calculatorForm.addEventListener("submit", (e) => {
   e.preventDefault()
-  validateInput()
+  if(!validateInput()) return
 
   calculatorFormInput.value = ''
 })
@@ -61,25 +62,32 @@ function validateInput() {
   const input = calculatorFormInput.value
   const validPattern = /^[0-9+\-×÷/(). ]*$/
 
+  const replaceOperators = (input) => {
+    return input.replace(/\*/g, "×")
+                .replace(/\//g, "÷")
+  }
+  calculatorFormInput.value = replaceOperators(calculatorFormInput.value)
+
   if(input.length == 0) {
+    calculatorForm.classList.remove("error")
     console.log('null string')
     return false
   }
 
   if (/^[+\×\÷/).]/.test(input)) {
-    removeLastCalculatorSymbol()
+    calculatorForm.classList.add("error")
     console.log('First symbol cannot be an operator or closed parentheses or dot, except for minus (-).')
     return false
   }
 
   if (!validPattern.test(input)) {
-    removeLastCalculatorSymbol()
+    calculatorForm.classList.add("error")
     console.log('Invalid input! Please use only numbers and valid operators (+, -, ×, ÷).')
     return false
   }
 
   if (/[\+\-\×\÷\/]{2,}/.test(input)) {
-    removeLastCalculatorSymbol()
+    calculatorForm.classList.add("error")
     console.log('Invalid sequence of operators!')
     return false
   }
@@ -88,7 +96,7 @@ function validateInput() {
   const lastPartOfNumberWithDots = numberWithDots[numberWithDots.length - 1]
 
   if (lastPartOfNumberWithDots.split('.').length > 2) {
-    removeLastCalculatorSymbol()
+    calculatorForm.classList.add("error")
     console.log('A number cannot have more than one dot.')
     return false
   }
@@ -100,6 +108,9 @@ function validateInput() {
     console.log('Invalid sequence of parentheses!')
     return false
   }
+
+  calculatorForm.classList.remove("error")
+  return true
 }
 
 const calculatorDisplay = document.querySelector(".calculator__display")

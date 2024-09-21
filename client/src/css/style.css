@@ -244,6 +244,10 @@ body {
     align-items: center;
 }
 
+.calculator-form.error .calculator__display {
+    background: rgba(255, 0, 0, 0.1);
+}
+
 .calculator__display-text {
     background: none;
     width: 100%;
