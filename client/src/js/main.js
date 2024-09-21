@@ -22,7 +22,7 @@ ws.onmessage = (event) => {
   const message = JSON.parse(event.data);
   if (message.user == global_user) {
     //TODO: handle functions result here
-    if (message.type == 'update') {// this is trigger from backend that in some tab you ask for eval and you need to update history
+    if (message.type == 'update') { // this is trigger from backend that in some tab you ask for eval and you need to update history
       console.log("We need to update history list for this user");
     } else if (message.type == "eval_expr") { // this is responce on evalExpr function
       //TODO: should check somehow that it is answer for your expr
