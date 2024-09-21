@@ -7,13 +7,14 @@ const { Readable } = require('stream')
 
 const app = require('express')()
 
+const { hasArg, argParams } = require('./args_parser')
 const config = require('./config')
-const secrets = process.argv[2] == 'docker' ? {
-    ip: process.argv[3],
-    port: process.argv[4],
-    publishReleaseString: process.argv[5],
+const secrets = hasArg('docker') ? {
+    ip: argParams('docker', 3)[0],
+    port: argParams('docker', 3)[1],
+    publishReleaseString: argParams('docker', 3)[2],
 } : require('./secrets')
-const isHot = process.argv[process.argv.length - 1] == 'hot'
+const isHot = hasArg('hot')
 
 const appDir = path.join(__dirname, 'app')
 var currentDistDir = undefined
@@ -79,7 +80,7 @@ async function main() {
         })
     }
 
-    if (process.argv[2] != 'docker') {
+    if (!hasArg('docker')) {
         app.listen(secrets.port, secrets.ip, () => {
             console.log(`The server is running on http://${secrets.ip}:${secrets.port}`)
         })
