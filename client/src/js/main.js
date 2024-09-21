@@ -20,13 +20,20 @@ ws.onopen = () => {
 
 default_onmessage = function(event) {
   const message = JSON.parse(event.data);
-  console.log("Received message:", message);
-  if (message.type === 'update') {
-    if (message.user == global_user) {
+  if (message.user == global_user) {
+    if (message.type === 'update') {
       console.log("We need to update history list for this user");
+    } else if (message.type == "eval_expr") {
+      if (message.result != "error") {
+        console.log(message.result + " is valid result for expr = " + message.expr);
+      } else {
+        console.log("Got error while evaluate expr: " + message.error);
+      }
+    } else if (response.type == "update_history") {
+      console.log("whole history for our user = " + response.result);
+    } else {
+      console.log("Unknown message type");
     }
-  } else {
-    console.log("Unknown message type");
   }
 };
 
@@ -39,33 +46,11 @@ ws.onclose = () => {
 async function evalExpr(user, expr) {
   const message = { type: "eval_expr", user: user, expr: expr };
   ws.send(JSON.stringify(message));
-  ws.onmessage = (event) => {
-    const response = JSON.parse(event.data);
-    if (response.type == "eval_expr") {
-      if (response.result != "error") {
-        console.log(response.result + " is valid result");
-      } else {
-        console.log("Got error while evaluate expr: " + response.error);
-      }
-    } else {
-      console.log("Unknown responce type for eval_expr");
-    }
-    ws.onmessage = default_onmessage;
-  }
 }
 
 async function updateHistory(user) {
   const message = { type: "update_history", user: user };
   ws.send(JSON.stringify(message));
-  ws.onmessage = (event) => {
-    const response = JSON.parse(event.data);
-    if (response.type == "update_history") {
-      console.log("whole history for our user = " + response.result);
-    } else {
-      console.log("Unknown responce type for update_history");
-    }
-    ws.onmessage = default_onmessage;
-  }
 }
 
 function removeLastCalculatorSymbol() {

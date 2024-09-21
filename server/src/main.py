@@ -25,16 +25,16 @@ async def handler(websocket):
             result = evaluate_expression(expr)
             write_new_result(user, expr, result, db_connections)
             if result[1]:
-                await websocket.send(json.dumps({"type" : "eval_expr", "result" : result[0]}))
+                await websocket.send(json.dumps({"type" : "eval_expr", "user": user, "expr": expr, "result" : result[0]}))
                 await websocket.send(json.dumps({"type": "update", "user": user, "data": "you need to update"}))
             else:
-                await websocket.send(json.dumps({"type" : "eval_expr", "result" : "error", "error" : result[0]}))
+                await websocket.send(json.dumps({"type" : "eval_expr", "user": user, "result" : "error", "error" : result[0]}))
         elif data["type"] == "update_history":
             user = data["user"]
             history = get_all_user_requests(user, db_connections)
-            await websocket.send(json.dumps({"type" : "update_history", "result" : history}))
+            await websocket.send(json.dumps({"type" : "update_history", "user": user, "result" : history}))
         else:
-            await websocket.send(json.dumps({"error": "Unknown message type"}))
+            await websocket.send(json.dumps({"user": user, "error": "Unknown message type"}))
 
 async def main():
     async with websockets.serve(handler, "0.0.0.0", 5000):
