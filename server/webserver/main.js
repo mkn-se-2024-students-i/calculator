@@ -46,8 +46,6 @@ async function main() {
     app.get('/*', (req, res) => {
         const reqPath = `.${req.path == '/' ? '/index.html' : req.path}`
         const filePath = path.join(currentDistDir, reqPath)
-        console.log(filePath)
-        console.log(fs.readdirSync(path.join(filePath, '..')))
         if (!fs.existsSync(path.join(currentDistDir, reqPath))) {
             res.sendStatus(404)
             return
@@ -56,12 +54,24 @@ async function main() {
     })
 
     if (isHot) {
-        app.post(`/${secrets.publishReleaseString}`, async (req, res) => {
-            const tagsList = await (await fetch(config.tagsListURL)).json()
-            const latest = tagsList[0].name
+        var prevUpdate = Date.now()
 
-            await downloadDist(latest)
-            res.sendStatus(200)
+        app.post(`/${secrets.publishReleaseString}`, async (req, res) => {
+            var now = Date.now()
+            if (now > prevUpdate + config.minUpdateFreq) {
+                const tagsList = await (await fetch(config.tagsListURL)).json()
+                const latest = tagsList[0].name
+
+                try {
+                    await downloadDist(latest)
+                    prevUpdate = now
+                    res.sendStatus(200)
+                } catch {
+                    res.sendStatus(500)
+                }
+            } else {
+                res.sendStatus(403)
+            }
         })
     }
 
