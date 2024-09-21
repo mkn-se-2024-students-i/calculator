@@ -40,11 +40,11 @@ body {
     font-family: 'Circe Bold';
     position: relative;
     overflow-y: hidden;
-	background: linear-gradient(120deg, #ff9a9e, #fad0c4, #fad0c4, #fbc2eb, #a18cd176, #fad0c4);
-	background-size: 200% 200%;
-	-webkit-animation: gradientAnimation 140s ease infinite;
-	-moz-animation: gradientAnimation 140s ease infinite;
-	animation: gradientAnimation 140s ease infinite;
+   background: linear-gradient(120deg, #ff9a9e, #fad0c4, #fad0c4, #fbc2eb, #a18cd176, #fad0c4);
+    background-size: 200% 200%;
+    -webkit-animation: gradientAnimation 140s ease infinite;
+    -moz-animation: gradientAnimation 140s ease infinite;
+    animation: gradientAnimation 140s ease infinite;
 }
 
 ::-webkit-scrollbar {
