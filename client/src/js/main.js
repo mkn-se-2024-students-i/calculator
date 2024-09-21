@@ -18,7 +18,7 @@ ws.onopen = () => {
   console.log("WebSocket connection opened");
 };
 
-default_onmessage = function(event) {
+ws.onmessage = (event) => {
   const message = JSON.parse(event.data);
   if (message.user == global_user) {
     if (message.type === 'update') {
@@ -36,8 +36,6 @@ default_onmessage = function(event) {
     }
   }
 };
-
-ws.onmessage = default_onmessage;
 
 ws.onclose = () => {
   console.log("WebSocket connection closed");
