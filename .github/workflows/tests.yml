@@ -16,6 +16,4 @@ jobs:
 
       - run: |
           ls -lia
-          TAG=v0-$(date '+%Y%m%d.%H%M%S')
-          echo $TAG
         name: List Files
