@@ -27,8 +27,8 @@ class Message_Types(enum.Enum):
 async def broadcast_to_user(user, message):
     # Send the message to all connected clients of the specified user
     if user in user_connections:
-        current_iser_connections = user_connections[user]
-        for connection in current_iser_connections:
+        current_user_connections = user_connections[user].copy()
+        for connection in current_user_connections:
             await connection.send(message)
 
 async def handler(websocket):
@@ -75,6 +75,6 @@ if __name__ == "__main__":
     load_dotenv()
 
     global db_connections
-    # db_connections = get_database_connections_pool(THREADS_COUNT)
+    db_connections = get_database_connections_pool(THREADS_COUNT)
 
     asyncio.run(main())
