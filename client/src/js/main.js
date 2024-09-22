@@ -11,7 +11,7 @@ const calculatorFormInput = calculatorForm.querySelector("input[name='calculator
 calculatorClearButton.addEventListener("click", removeLastCalculatorSymbol)
 calculatorFormInput.addEventListener("input",  () => calculatorForm.classList.remove("error"))
 
-const ws = new WebSocket("ws://0.0.0.0:5000"); // it seems like for virtual ip = 10.129.0.15 but it starts endless connecting
+const ws = new WebSocket("ws://84.201.143.213:5000"); // it seems like for virtual ip = 10.129.0.15 but it starts endless connecting
 const global_user = crypto.randomUUID(); //TODO: it is for tests, move it to localStorage
 
 ws.onopen = () => {
@@ -26,14 +26,14 @@ ws.onmessage = (event) => {
     //TODO: handle functions result here
     if (message.type == 'update') { // this is trigger from backend that in some tab you ask for eval and you need to update history
       console.log("We need to update history list for this user");
-    } else if (message.type == "eval_expr") { // this is responce on evalExpr function
+    } else if (message.type == "eval_expr") { // this is response on evalExpr function
       //TODO: should check somehow that it is answer for your expr
       if (message.result != "error") {
         console.log(message.result + " is valid result for expr = " + message.expr);
       } else {
         console.log("Got error while evaluate expr: " + message.error);
       }
-    } else if (response.type == "get_history") { // this is responce on getHistory function
+    } else if (response.type == "get_history") { // this is response on getHistory function
       console.log("whole history for our user = " + response.result);
     } else {
       console.log("Unknown message type");
