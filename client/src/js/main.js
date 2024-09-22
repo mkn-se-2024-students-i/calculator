@@ -9,7 +9,7 @@ const calculatorClearButton = document.querySelector(".calculator__button.remove
 const calculatorFormInput = calculatorForm.querySelector("input[name='calculator-request']")
 
 calculatorClearButton.addEventListener("click", removeLastCalculatorSymbol)
-calculatorFormInput.addEventListener("input", validateInput)
+calculatorFormInput.addEventListener("input",  () => calculatorForm.classList.remove("error"))
 
 const ws = new WebSocket("ws://0.0.0.0:5000"); // it seems like for virtual ip = 10.129.0.15 but it starts endless connecting
 const global_user = crypto.randomUUID(); //TODO: it is for tests, move it to localStorage
@@ -56,8 +56,8 @@ async function getHistory(user) {
 }
 
 function removeLastCalculatorSymbol() {
+  calculatorForm.classList.remove("error")
   calculatorFormInput.value = calculatorFormInput.value.slice(0, -1)
-  validateInput()
 }
 
 function calculatorInputOnFocus() {
@@ -80,24 +80,15 @@ calculatorButtons.forEach(btn => {
   btn.addEventListener("click", () => {
     calculatorFormInput.value += btn.dataset.buttonSymbol
     calculatorInputOnFocus()
-    validateInput()
+    calculatorForm.classList.remove("error")
   })
-})
-
-calculatorFormInput.addEventListener("keydown", (e) => {
-  if (e.code === "NumpadDivide" || e.code === "Slash") {
-    calculatorFormInput.value += '÷'
-  }
-  if (e.code === "NumpadMultiply" || (e.code === "Digit8" && e.shiftKey)) {
-    calculatorFormInput.value += '×'
-  }
-
-  validateInput()
 })
 
 calculatorForm.addEventListener("submit", (e) => {
   e.preventDefault()
-  if(!validateInput()) return
+  if(!validateInput()) {
+    return
+  }
 
   evalExpr(global_user, calculatorFormInput.value)
   calculatorFormInput.value = ''
@@ -151,6 +142,7 @@ function validateInput() {
 
   if (openParentheses !== closeParentheses) {
     console.log('Invalid sequence of parentheses!')
+    calculatorForm.classList.add("error")
     return false
   }
 
