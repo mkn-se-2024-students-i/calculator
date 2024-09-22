@@ -15,7 +15,7 @@ calculatorClearButton.addEventListener("click", removeLastCalculatorSymbol)
 calculatorFormInput.addEventListener("input",  () => calculatorForm.classList.remove("error"))
 
 const ws = new WebSocket("ws://84.201.143.213:5000"); // it seems like for virtual ip = 10.129.0.15 but it starts endless connecting
-const global_user = crypto.randomUUID(); //TODO: it is for tests, move it to localStorage
+const global_user = 100500; //TODO: it is for tests, move it to localStorage
 
 ws.onopen = () => {
   console.log("WebSocket connection opened");
