@@ -15,26 +15,47 @@ from evaluation.eval import evaluate_expression
 # TODO(vvsg): may be we should set it as arg
 THREADS_COUNT = 5
 
+# Dictionary to hold user -> set of WebSocket connections
+user_connections = {}
+
+async def broadcast_to_user(user, message):
+    # Send the message to all connected clients of the specified user
+    if user in user_connections:
+        for connection in user_connections[user]:
+            await connection.send(message)
+
 async def handler(websocket):
     global db_connections
-    async for message in websocket:
-        data = json.loads(message)
-        if data["type"] == "eval_expr":
+    user = None
+
+    try:
+        async for message in websocket:
+            data = json.loads(message)
             user = data["user"]
-            expr = data["expr"]
-            result = evaluate_expression(expr)
-            write_new_result(user, expr, result, db_connections)
-            if result[1]:
-                await websocket.send(json.dumps({"type" : "eval_expr", "user": user, "expr": expr, "result" : result[0]}))
-                await websocket.send(json.dumps({"type": "update", "user": user, "data": "you need to update"}))
+            if user not in user_connections:
+                user_connections[user] = set()
+            user_connections[user].add(websocket)
+            if data["type"] == "eval_expr":
+                expr = data["expr"]
+                result = evaluate_expression(expr)
+                write_new_result(user, expr, result, db_connections)
+                if result[1]:
+                    await websocket.send(json.dumps({"type" : "eval_expr", "user": user, "expr": expr, "result" : result[0]}))
+                    await broadcast_to_user(user, json.dumps({"type": "update", "user": user, "data": "you need to update"})) 
+                else:
+                    await websocket.send(json.dumps({"type" : "eval_expr", "user": user, "result" : "error", "error" : result[0]}))
+            elif data["type"] == "get_history":
+                history = get_all_user_requests(user, db_connections)
+                await websocket.send(json.dumps({"type" : "get_history", "user": user, "result" : history}))
             else:
-                await websocket.send(json.dumps({"type" : "eval_expr", "user": user, "result" : "error", "error" : result[0]}))
-        elif data["type"] == "get_history":
-            user = data["user"]
-            history = get_all_user_requests(user, db_connections)
-            await websocket.send(json.dumps({"type" : "get_history", "user": user, "result" : history}))
-        else:
-            await websocket.send(json.dumps({"user": user, "error": "Unknown message type"}))
+                await websocket.send(json.dumps({"user": user, "error": "Unknown message type"}))
+    finally:
+        print("unregister websocket")
+        # Unregister the connection on disconnect
+        if user and user in user_connections:
+            user_connections[user].remove(websocket)
+            if not user_connections[user]:  # Remove the user entry if no connections left
+                del user_connections[user]
 
 async def main():
     async with websockets.serve(handler, "0.0.0.0", 5000):

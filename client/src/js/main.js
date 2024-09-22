@@ -12,7 +12,7 @@ calculatorClearButton.addEventListener("click", removeLastCalculatorSymbol)
 calculatorFormInput.addEventListener("input", validateInput)
 
 const ws = new WebSocket("ws://0.0.0.0:5000");
-const global_user = "testUser"; //TODO: it is for tests, move it to localStorage
+const global_user = crypto.randomUUID(); //TODO: it is for tests, move it to localStorage
 
 ws.onopen = () => {
   console.log("WebSocket connection opened");
@@ -20,6 +20,8 @@ ws.onopen = () => {
 
 ws.onmessage = (event) => {
   const message = JSON.parse(event.data);
+
+  // honestly, other user could be only if we have some mistakes on server side
   if (message.user == global_user) {
     //TODO: handle functions result here
     if (message.type == 'update') { // this is trigger from backend that in some tab you ask for eval and you need to update history
