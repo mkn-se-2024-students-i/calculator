@@ -49,8 +49,10 @@ async def handler(websocket):
                 await websocket.send(json.dumps({"type" : "get_history", "user": user, "result" : history}))
             else:
                 await websocket.send(json.dumps({"user": user, "error": "Unknown message type"}))
+    except Exception as e:
+        print("Got Error: ", e)
     finally:
-        print("unregister websocket")
+        print("Unregister websocket")
         # Unregister the connection on disconnect
         if user and user in user_connections:
             user_connections[user].remove(websocket)
