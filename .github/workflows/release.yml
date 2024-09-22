@@ -25,7 +25,7 @@ jobs:
           path: dist
 
       - run: |
-          TAG=$GITHUB_REF_NAME-${date '+%Y%m%d%H%M%S'}
+          TAG=v0.$(date '+%Y%m%d.%H%M%S')
           gh release create $TAG --repo $GITHUB_REPOSITORY
           tar -cf dist.tar dist
           gh release upload $TAG dist.tar --repo $GITHUB_REPOSITORY
