@@ -81,6 +81,8 @@ async function main() {
             }
 
             try {
+                const tagsList = await (await fetch(config.tagsListURL)).json()
+                const latest = tagsList[0].name
                 await downloadDist(latest)
                 prevUpdate = now
                 res.sendStatus(200)
