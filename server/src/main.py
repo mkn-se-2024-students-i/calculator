@@ -11,6 +11,7 @@ import asyncio
 import websockets
 import json
 from evaluation.eval import evaluate_expression
+import enum
 
 # TODO(vvsg): may be we should set it as arg
 THREADS_COUNT = 5
@@ -18,10 +19,16 @@ THREADS_COUNT = 5
 # Dictionary to hold user -> set of WebSocket connections
 user_connections = {}
 
+class Message_Types(enum.Enum):
+    eval_expr = 1
+    get_history = 2
+    update = 3
+
 async def broadcast_to_user(user, message):
     # Send the message to all connected clients of the specified user
     if user in user_connections:
-        for connection in user_connections[user]:
+        current_iser_connections = user_connections[user]
+        for connection in current_iser_connections:
             await connection.send(message)
 
 async def handler(websocket):
@@ -35,18 +42,18 @@ async def handler(websocket):
             if user not in user_connections:
                 user_connections[user] = set()
             user_connections[user].add(websocket)
-            if data["type"] == "eval_expr":
+            if data["type"] == Message_Types.eval_expr.name:
                 expr = data["expr"]
-                result = evaluate_expression(expr)
-                write_new_result(user, expr, result[0], db_connections)
-                if result[1]:
-                    await websocket.send(json.dumps({"type" : "eval_expr", "user": user, "expr": expr, "result" : result[0]}))
-                    await broadcast_to_user(user, json.dumps({"type": "update", "user": user, "data": "you need to update"})) 
+                result, ok = evaluate_expression(expr)
+                write_new_result(user, expr, result, db_connections)
+                if ok:
+                    await websocket.send(json.dumps({"type" : Message_Types.eval_expr.name, "user": user, "expr": expr, "result" : result}))
+                    await broadcast_to_user(user, json.dumps({"type": Message_Types.update.name, "user": user, "data": "you need to update"})) 
                 else:
-                    await websocket.send(json.dumps({"type" : "eval_expr", "user": user, "result" : "error", "error" : result[0]}))
-            elif data["type"] == "get_history":
+                    await websocket.send(json.dumps({"type" : Message_Types.eval_expr.name, "user": user, "result" : "error", "error" : result}))
+            elif data["type"] == Message_Types.get_history.name:
                 history = get_all_user_requests(user, db_connections)
-                await websocket.send(json.dumps({"type" : "get_history", "user": user, "result" : history}))
+                await websocket.send(json.dumps({"type" : Message_Types.get_history.name, "user": user, "result" : history}))
             else:
                 await websocket.send(json.dumps({"user": user, "error": "Unknown message type"}))
     except Exception as e:
@@ -68,6 +75,6 @@ if __name__ == "__main__":
     load_dotenv()
 
     global db_connections
-    db_connections = get_database_connections_pool(THREADS_COUNT)
+    # db_connections = get_database_connections_pool(THREADS_COUNT)
 
     asyncio.run(main())
