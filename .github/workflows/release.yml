@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    branches: [ "master", "lie/prerelease" ]
+    branches: [ "master" ]
 
 jobs:
   run_tests:
