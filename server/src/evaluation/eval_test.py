@@ -4,6 +4,7 @@ def _assert_for_expr_eval(expr: str, to_check: bool, expected, real) -> None:
 	try:
 		assert(to_check)
 	except AssertionError:
+		print("AssertionError")
 		print("Test case: " + expr)
 		print("Expected: " + expected.__str__() + ", but found: " + real.__str__())
 
