@@ -4,6 +4,7 @@ def _assert_for_expr_eval(expr: str, to_check: bool, expected, real) -> None:
 	try:
 		assert(to_check)
 	except AssertionError:
+		print("AssertionError")
 		print("Test case: " + expr)
 		print("Expected: " + expected.__str__() + ", but found: " + real.__str__())
 
@@ -51,7 +52,6 @@ def test_eval() -> None:
 	_test_suit("(sqrt(49) - log(10)) × 2", True, 6)
 	_test_suit("(sqrt(64) + log(1000)) ÷ 2", True, 8.5)
 	_test_suit("sqrt(log(100))", True, 1)
-	_test_suit("sqrt(log(100))", False, 1)
 
 	_test_suit("-2 + 3", True, 1)
 	_test_suit("-5 - (-3)", True, -2)

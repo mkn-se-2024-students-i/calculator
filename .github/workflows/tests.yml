@@ -21,4 +21,7 @@ jobs:
           pip install -r requirements.txt
       - name: Run Eval Tests
         run: |
-            python3 server/src/evaluation/eval_test.py
+            python3 server/src/evaluation/eval_test.py > test_output.txt
+            if grep -q "AssertionError" test_output.txt; then
+              exit 1
+            fi
