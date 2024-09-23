@@ -40,6 +40,7 @@ def test_eval() -> None:
 	_test_suit("(2 + 3) ^ 2", True, 25)
 	_test_suit("(10 - (1 + 1)) × 3", True, 24)
 	_test_suit("log(1000) ÷ log(10)", True, 3)
+	_test_suit("log(1000) ÷ log(10)", False, 3)
 
 	_test_suit("sqrt(16)", True, 4)
 	_test_suit("sqrt(25)", True, 5)
