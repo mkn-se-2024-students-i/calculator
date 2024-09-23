@@ -1,3 +1,6 @@
+import "../css/style.css"
+import "../css/background-animation.css"
+
 const app = document.getElementById("app")
 const btnScreenScrollers = document.querySelectorAll(".screen__btn")
 const historyItems = document.querySelectorAll(".history__item")
@@ -9,11 +12,55 @@ const calculatorClearButton = document.querySelector(".calculator__button.remove
 const calculatorFormInput = calculatorForm.querySelector("input[name='calculator-request']")
 
 calculatorClearButton.addEventListener("click", removeLastCalculatorSymbol)
-calculatorFormInput.addEventListener("input", validateInput)
+calculatorFormInput.addEventListener("input",  () => calculatorForm.classList.remove("error"))
+
+const ws = new WebSocket("ws://84.201.143.213:5000"); // it seems like for virtual ip = 10.129.0.15 but it starts endless connecting
+const global_user = 100500; //TODO: it is for tests, move it to localStorage
+
+ws.onopen = () => {
+  console.log("WebSocket connection opened");
+};
+
+ws.onmessage = (event) => {
+  const message = JSON.parse(event.data);
+
+  // honestly, other user could be only if we have some mistakes on server side
+  if (message.user == global_user) {
+    //TODO: handle functions result here
+    if (message.type == 'update') { // this is trigger from backend that in some tab you ask for eval and you need to update history
+      console.log("We need to update history list for this user");
+    } else if (message.type == "eval_expr") { // this is response on evalExpr function
+      //TODO: should check somehow that it is answer for your expr
+      if (message.result != "error") {
+        console.log(message.result + " is valid result for expr = " + message.expr);
+      } else {
+        console.log("Got error while evaluate expr: " + message.error);
+      }
+    } else if (response.type == "get_history") { // this is response on getHistory function
+      console.log("whole history for our user = " + response.result);
+    } else {
+      console.log("Unknown message type");
+    }
+  }
+};
+
+ws.onclose = () => {
+  console.log("WebSocket connection closed");
+};
+
+async function evalExpr(user, expr) {
+  const message = { type: "eval_expr", user: user, expr: expr };
+  ws.send(JSON.stringify(message));
+}
+
+async function getHistory(user) {
+  const message = { type: "get_history", user: user };
+  ws.send(JSON.stringify(message));
+}
 
 function removeLastCalculatorSymbol() {
+  calculatorForm.classList.remove("error")
   calculatorFormInput.value = calculatorFormInput.value.slice(0, -1)
-  validateInput()
 }
 
 function calculatorInputOnFocus() {
@@ -36,25 +83,17 @@ calculatorButtons.forEach(btn => {
   btn.addEventListener("click", () => {
     calculatorFormInput.value += btn.dataset.buttonSymbol
     calculatorInputOnFocus()
-    validateInput()
+    calculatorForm.classList.remove("error")
   })
-})
-
-calculatorFormInput.addEventListener("keydown", (e) => {
-  if (e.code === "NumpadDivide" || e.code === "Slash") {
-    calculatorFormInput.value += '÷'
-  }
-  if (e.code === "NumpadMultiply" || (e.code === "Digit8" && e.shiftKey)) {
-    calculatorFormInput.value += '×'
-  }
-
-  validateInput()
 })
 
 calculatorForm.addEventListener("submit", (e) => {
   e.preventDefault()
-  if(!validateInput()) return
+  if(!validateInput()) {
+    return
+  }
 
+  evalExpr(global_user, calculatorFormInput.value)
   calculatorFormInput.value = ''
 })
 
@@ -106,6 +145,7 @@ function validateInput() {
 
   if (openParentheses !== closeParentheses) {
     console.log('Invalid sequence of parentheses!')
+    calculatorForm.classList.add("error")
     return false
   }
 

@@ -5,7 +5,6 @@
 		url('../fonts/circe_bold.woff2') format('woff2'), /* Super Modern Browsers */
 		url('../fonts/circe_bold.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
 		url('../fonts/circe_bold.ttf') format('truetype'), /* Safari, Android, iOS */
-		url('../fonts/circe_bold.svg#circe_bold') format('svg'); /* Chrome < 4, Legacy iOS */
 }
 
 @font-face {
@@ -15,7 +14,6 @@
 		url('../fonts/circe_extrabold.woff2') format('woff2'), /* Super Modern Browsers */
 		url('../fonts/circe_extrabold.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
 		url('../fonts/circe_extrabold.ttf') format('truetype'), /* Safari, Android, iOS */
-		url('../fonts/circe_extrabold.svg#circe_extrabold') format('svg'); /* Chrome < 4, Legacy iOS */
 }
 
 @font-face {
@@ -25,7 +23,6 @@
 		url('../fonts/circe_extralight.woff2') format('woff2'), /* Super Modern Browsers */
 		url('../fonts/circe_extralight.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
 		url('../fonts/circe_extralight.ttf') format('truetype'), /* Safari, Android, iOS */
-		url('../fonts/circe_extralight.svg#circe_extralight') format('svg'); /* Chrome < 4, Legacy iOS */
 }
 
 @font-face {
@@ -35,7 +32,6 @@
 		url('../fonts/circe_light.woff2') format('woff2'), /* Super Modern Browsers */
 		url('../fonts/circe_light.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
 		url('../fonts/circe_light.ttf') format('truetype'), /* Safari, Android, iOS */
-		url('../fonts/circe_light.svg#circe_light') format('svg'); /* Chrome < 4, Legacy iOS */
 }
 
 @font-face {
@@ -45,7 +41,6 @@
 		url('../fonts/circe.woff2') format('woff2'), /* Super Modern Browsers */
 		url('../fonts/circe.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
 		url('../fonts/circe.ttf') format('truetype'), /* Safari, Android, iOS */
-		url('../fonts/circe.svg#circe') format('svg'); /* Chrome < 4, Legacy iOS */
 }
 
 @font-face {
@@ -55,6 +50,4 @@
 		url('../fonts/circe_thin.woff2') format('woff2'), /* Super Modern Browsers */
 		url('../fonts/circe_thin.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
 		url('../fonts/circe_thin.ttf') format('truetype'), /* Safari, Android, iOS */
-		url('../fonts/circe_thin.svg#circe_thin') format('svg'); /* Chrome < 4, Legacy iOS */
 }
-
