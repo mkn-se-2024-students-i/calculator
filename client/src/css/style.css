@@ -116,8 +116,7 @@ body {
     user-select: none;
     column-gap: 5px;
     color: #fff;
-    /* text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.05); */
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.15);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.05);
     background: rgb(255,255,255);
     background: radial-gradient(circle, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.05) 100%);
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
