@@ -17,8 +17,8 @@ jobs:
           python-version: '3.12'
       - name: Install dependencies
         run: |
-          python3 -m pip install --upgrade pip
-          pip install -r requirements.txt
+            python3 -m pip install --upgrade pip
+            pip install -r requirements.txt 
       - name: Run Eval Tests
         run: |
             python3 server/src/evaluation/eval_test.py > test_output.txt
