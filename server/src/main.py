@@ -53,7 +53,7 @@ async def handler(websocket):
                     await websocket.send(json.dumps({"type": Message_Types.eval_expr.name, "user": user, "result": "error", "error": result}))
             elif data["type"] == Message_Types.get_history.name:
                 history = get_all_user_requests(user, db_connections)
-                await websocket.send(json.dumps({"type": Message_Types.get_history.name, "user": user, "result": history}))
+                await websocket.send(json.dumps({"type": Message_Types.get_history.name, "user": user, "result": [record._asdict() for record in history]}))
             else:
                 await websocket.send(json.dumps({"user": user, "error": "Unknown message type"}))
     except Exception as e:
