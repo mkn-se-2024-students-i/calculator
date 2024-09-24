@@ -32,7 +32,7 @@ def evaluate_expression(expr: str) -> tuple[str, bool]:
 			return ("The given expression contains forbidden symbols", False)
 		correct_expr = _change_op_to_python_op(_remove_invalid_sequenses(expr))
 		prec = 1e20
-		int_prec = 1e-10
+		int_prec = 1e-21
 		res = eval(correct_expr)
 		if (int(res) - int_prec <= res and res <= int(res) + int_prec):
 			res = int(res)
