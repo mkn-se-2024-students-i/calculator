@@ -47,13 +47,13 @@ async def handler(websocket):
                 result, ok = evaluate_expression(expr)
                 write_new_result(user, expr, result, db_connections)
                 if ok:
-                    await websocket.send(json.dumps({"type" : Message_Types.eval_expr.name, "user": user, "expr": expr, "result" : result}))
-                    await broadcast_to_user(user, json.dumps({"type": Message_Types.update.name, "user": user, "expr": expr, "result" : result}))
+                    await websocket.send(json.dumps({"type": Message_Types.eval_expr.name, "user": user, "expr": expr, "result": result}))
+                    await broadcast_to_user(user, json.dumps({"type": Message_Types.update.name, "user": user, "expr": expr, "result": result}))
                 else:
-                    await websocket.send(json.dumps({"type" : Message_Types.eval_expr.name, "user": user, "result" : "error", "error" : result}))
+                    await websocket.send(json.dumps({"type": Message_Types.eval_expr.name, "user": user, "result": "error", "error": result}))
             elif data["type"] == Message_Types.get_history.name:
                 history = get_all_user_requests(user, db_connections)
-                await websocket.send(json.dumps({"type" : Message_Types.get_history.name, "user": user, "result" : history}))
+                await websocket.send(json.dumps({"type": Message_Types.get_history.name, "user": user, "result": history}))
             else:
                 await websocket.send(json.dumps({"user": user, "error": "Unknown message type"}))
     except Exception as e:

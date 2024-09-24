@@ -37,9 +37,8 @@ ws.onmessage = (event) => {
   // honestly, other user could be only if we have some mistakes on server side
   if (message.user == globalUser) {
     if (message.type == 'update') { // this is trigger from backend that in some tab you ask for eval and you need to update history
-      addNewElementToHistory(message.expr, message.ans);
+      addNewElementToHistory(message.expr, message.result);
       console.log("We need to update history list for this user");
-      console.log(historyItems);
     } else if (message.type == "eval_expr") { // this is response on evalExpr function
       if (message.result != "error") {
         calculatorFormInput.value = message.result
@@ -48,13 +47,11 @@ ws.onmessage = (event) => {
         calculatorForm.classList.add("error");
         console.log("Got error while evaluate expr: " + message.error);
       }
-      console.log(historyItems);
     } else if (message.type == "get_history") { // this is response on getHistory function
       console.log("whole history for our user = " + response.result);
       message.result.forEach(elem => {
         addNewElementToHistory(elem.request, elem.result);
       })
-      console.log(historyItems);
     } else {
       console.log("Unknown message type");
     }
@@ -186,13 +183,13 @@ function uuidv4() {
   });
 }
 
-function addNewElementToHistory(expr, ans) {
+function addNewElementToHistory(expr, answer) {
   const newRecord = document.createElement('li');
   newRecord.className = 'history__item';
 
   const answerSpan = document.createElement('span');
   answerSpan.className = 'history__item-answer';
-  answerSpan.textContent = ans;
+  answerSpan.textContent = answer;
 
   const requestParagraph = document.createElement('p');
   requestParagraph.className = 'history__item-request';
