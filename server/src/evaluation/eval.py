@@ -31,7 +31,7 @@ def evaluate_expression(expr: str) -> tuple[str, bool]:
 		if (not _check_arithmetic_expression(expr)):
 			return ("The given expression contains forbidden symbols", False)
 		correct_expr = _change_op_to_python_op(_remove_invalid_sequenses(expr))
-		prec = 10000000000
+		prec = 1e10
 		res = (int(eval(correct_expr) * prec) / prec).__str__()
 		return (res, True)
 	except:
