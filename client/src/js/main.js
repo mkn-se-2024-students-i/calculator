@@ -21,6 +21,7 @@ const replaceOperators = (input) => {
 calculatorClearButton.addEventListener("click", () => {
   calculatorFormInput.value = ""
   calculatorForm.classList.remove("error")
+  calculatorInputOnFocus()
 })
 
 calculatorFormInput.addEventListener("input", function() {
@@ -92,6 +93,7 @@ function removeLastCalculatorSymbol() {
 
 function calculatorInputOnFocus() {
   calculatorFormInput.scrollLeft = calculatorFormInput.scrollWidth
+  calculatorFormInput.focus()
 }
 
 btnScreenScrollers.forEach(btn => {
