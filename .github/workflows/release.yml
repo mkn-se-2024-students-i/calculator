@@ -25,10 +25,25 @@ jobs:
           path: dist
 
       - run: |
-          TAG=$GITHUB_REF_NAME-${GITHUB_SHA:0:7}
+          TAG=v0.$(date '+%Y%m%d.%H%M%S')
           gh release create $TAG --repo $GITHUB_REPOSITORY
           tar -cf dist.tar dist
           gh release upload $TAG dist.tar --repo $GITHUB_REPOSITORY
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         name: Create Release
+  
+  trigger_webserver_update:
+    name: Trigger Webserver Update
+    needs: [release_gh]
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          if [[ ! -z "$WEBSERVER_IP" && ! -z "$WEBSERVER_PORT" && ! -z "$WEBSERVER_RELEASE" ]]; then
+            curl -X POST http://$WEBSERVER_IP:$WEBSERVER_PORT/$WEBSERVER_RELEASE;
+          fi
+        env:
+          WEBSERVER_IP: ${{ secrets.WEBSERVER_IP }}
+          WEBSERVER_PORT: ${{ secrets.WEBSERVER_PORT }}
+          WEBSERVER_RELEASE: ${{ secrets.WEBSERVER_RELEASE }}
+        name: Trigger Webserver Update

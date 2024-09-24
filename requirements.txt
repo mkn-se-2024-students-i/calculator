@@ -1,0 +1,4 @@
+mysql-connector-python==9.0.0
+python-dotenv==1.0.1
+regex==2021.8.21
+websockets==13.1

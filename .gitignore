@@ -5,3 +5,7 @@ build
 out
 
 *secret*
+Dockerfile
+*.env
+
+*__pycache__*
