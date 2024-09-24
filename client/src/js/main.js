@@ -139,7 +139,7 @@ function handleHistoryRecordClick(item) {
 
 function validateInput() {
   const input = calculatorFormInput.value
-  const validPattern = /^[0-9+\-×÷/(). ]*$/
+  const validPattern = /^[0-9+\-×÷/(). e]*$/
 
   calculatorFormInput.value = replaceOperators(calculatorFormInput.value)
 
