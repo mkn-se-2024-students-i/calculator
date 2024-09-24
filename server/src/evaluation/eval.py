@@ -2,7 +2,7 @@ import regex as re
 import math
 
 # TODO: add "sin", "cos", "tan", "e", "pi"
-_correct_elements_regexp = "([\× \- \+ \÷ \d \s \. \^ \( \)]*(log)*(sqrt)*)*"
+_correct_elements_regexp = "([\× \- \+ \÷ \d \s \. \^ \( \)]*(log)*(sqrt)*(e)*)*"
 
 _operation_replacements = [("log", "math.log"), ("sqrt", "math.sqrt"), ("^", "**"), ("×", "*"), ("÷", "/") ]
 
@@ -31,7 +31,8 @@ def evaluate_expression(expr: str) -> tuple[str, bool]:
 		if (not _check_arithmetic_expression(expr)):
 			return ("The given expression contains forbidden symbols", False)
 		correct_expr = _change_op_to_python_op(_remove_invalid_sequenses(expr))
-		res = eval(correct_expr).__str__()
+		prec = 1e10
+		res = (int(eval(correct_expr) * prec) / prec).__str__()
 		return (res, True)
 	except:
 		return ("The given expression is not correct arithmetic expression", False)

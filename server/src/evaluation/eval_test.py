@@ -166,6 +166,7 @@ def test_eval() -> None:
 	_test_suit("(5 + sqrt(16) ÷ log(100)", False)
 
 	_test_suit("(5 % 3) + (10 ÷÷ 2)", False)
+	_test_suit("1000e.0000", False)
 	_test_suit("(sin(90) + log(100, 10))", False)
 	_test_suit("(exp(1) - sqrt(4)) × (10 & 5)", False)
 	_test_suit("(5 ×× 2) ÷ (log(100, 10))", False)
