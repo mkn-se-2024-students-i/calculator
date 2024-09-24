@@ -12,7 +12,13 @@ const calculatorButtons = document.querySelectorAll(".calculator__button[data-bu
 const calculatorClearButton = document.querySelector(".calculator__button.remove-last-symbol")
 const calculatorFormInput = calculatorForm.querySelector("input[name='calculator-request']")
 
+const replaceOperators = (input) => {
+  return input.replace(/\*/g, "×")
+  .replace(/\//g, "÷")
+}
+
 calculatorClearButton.addEventListener("click", removeLastCalculatorSymbol)
+
 calculatorFormInput.addEventListener("input", function() {
   calculatorForm.classList.remove("error")
   calculatorFormInput.value = replaceOperators(calculatorFormInput.value)
@@ -135,10 +141,6 @@ function validateInput() {
   const input = calculatorFormInput.value
   const validPattern = /^[0-9+\-×÷/(). ]*$/
 
-  const replaceOperators = (input) => {
-    return input.replace(/\*/g, "×")
-                .replace(/\//g, "÷")
-  }
   calculatorFormInput.value = replaceOperators(calculatorFormInput.value)
 
   if(input.length == 0) {
