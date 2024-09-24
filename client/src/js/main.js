@@ -229,5 +229,4 @@ calculatorDisplay.addEventListener('touchend', e => {
   checkDirection()
 })
 
-// TODO: add same handling for each new history record
 historyItems.forEach(item => handleHistoryRecordClick(item))
