@@ -48,7 +48,7 @@ ws.onmessage = (event) => {
         console.log("Got error while evaluate expr: " + message.error);
       }
     } else if (message.type == "get_history") { // this is response on getHistory function
-      console.log("whole history for our user = " + response.result);
+      console.log("whole history for our user = " + message.result);
       message.result.forEach(elem => {
         addNewElementToHistory(elem.request, elem.result);
       })
