@@ -3,7 +3,7 @@ import "../css/background-animation.css"
 
 const app = document.getElementById("app")
 const btnScreenScrollers = document.querySelectorAll(".screen__btn")
-const historyList = document.querySelectorAll(".history__list")
+const historyList = document.querySelector(".history__list")
 const historyItems = document.querySelectorAll(".history__item")
 const screenHome = document.querySelector(".screen_home") 
 
@@ -21,7 +21,7 @@ var globalUser = null;
 ws.onopen = () => {
   console.log("WebSocket connection opened");
   
-  userId = localStorage.getItem("user_id");
+  var userId = localStorage.getItem("user_id");
   if (userId == null) {
     userId = uuidv4();
     localStorage.setItem("user_id", userId);
@@ -185,14 +185,14 @@ function uuidv4() {
 
 function addNewElementToHistory(expr, answer) {
   const newRecord = document.createElement('li');
-  newRecord.className = 'history__item';
+  newRecord.className.add('history__item');
 
   const answerSpan = document.createElement('span');
-  answerSpan.className = 'history__item-answer';
+  answerSpan.className.add('history__item-answer');
   answerSpan.textContent = answer;
 
   const requestParagraph = document.createElement('p');
-  requestParagraph.className = 'history__item-request';
+  requestParagraph.className.add('history__item-request');
   requestParagraph.textContent = expr;
 
   newRecord.appendChild(answerSpan);
