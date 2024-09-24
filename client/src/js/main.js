@@ -17,7 +17,7 @@ const replaceOperators = (input) => {
   .replace(/\//g, "÷")
 }
 
-calculatorClearButton.addEventListener("click", removeLastCalculatorSymbol)
+calculatorClearButton.addEventListener("click", calculatorFormInput.value = 0)
 
 calculatorFormInput.addEventListener("input", function() {
   calculatorForm.classList.remove("error")
@@ -139,7 +139,7 @@ function handleHistoryRecordClick(item) {
 
 function validateInput() {
   const input = calculatorFormInput.value
-  const validPattern = /^[0-9+\-×÷/(). ]*$/
+  const validPattern = /^[0-9+\-×÷/(). e]*$/
 
   calculatorFormInput.value = replaceOperators(calculatorFormInput.value)
 
