@@ -110,6 +110,24 @@ calculatorForm.addEventListener("submit", (e) => {
   evalExpr(globalUser, calculatorFormInput.value)
 })
 
+function handleHistoryRecordClick(item) {
+  item.addEventListener("click", () => {
+    const itemRequest = item.querySelector(".history__item-request")
+    calculatorFormInput.value = itemRequest.innerText
+    calculatorInputOnFocus()
+    
+    app.scrollTo({
+      top: 0,
+      left: screenHome.offsetLeft,
+      behavior: 'smooth'
+    })
+
+    setTimeout(() => {
+      calculatorFormInput.focus()
+    }, 1000)
+  })
+}
+
 function validateInput() {
   const input = calculatorFormInput.value
   const validPattern = /^[0-9+\-×÷/(). ]*$/
@@ -197,6 +215,8 @@ function addNewElementToHistory(expr, answer) {
 
   newRecord.appendChild(answerSpan);
   newRecord.appendChild(requestParagraph);
+  
+  handleHistoryRecordClick(newRecord);
   historyList.appendChild(newRecord);
 }
 
@@ -209,21 +229,4 @@ calculatorDisplay.addEventListener('touchend', e => {
   checkDirection()
 })
 
-// TODO: add same handling for each new history record
-historyItems.forEach(item => {
-  item.addEventListener("click", () => {
-    const itemRequest = item.querySelector(".history__item-request")
-    calculatorFormInput.value = itemRequest.innerText
-    calculatorInputOnFocus()
-    
-    app.scrollTo({
-      top: 0,
-      left: screenHome.offsetLeft,
-      behavior: 'smooth'
-    })
-
-    setTimeout(() => {
-      calculatorFormInput.focus()
-    }, 1000)
-  })
-})
+historyItems.forEach(item => handleHistoryRecordClick(item))
