@@ -9,7 +9,7 @@ def _assert_for_expr_eval(expr: str, to_check: bool, expected, real) -> None:
 		print("Expected: " + expected.__str__() + ", but found: " + real.__str__())
 
 def _test_suit(expr: str, expected_ok: bool, expected_res: float = 0.0) -> None:
-	prec = 1e6
+	prec = 1e-9
 	res_str, ok = evaluate_expression(expr)
 	_assert_for_expr_eval(expr, ok == expected_ok, expected_ok, ok)
 	if (expected_ok and ok):
@@ -46,12 +46,12 @@ def test_eval() -> None:
 	_test_suit("log(10)", True, 1)
 	_test_suit("log (100)", True, 2)
 	_test_suit("log(10000)", True, 4)
-	_test_suit("sqrt(9) + log(100)", True, 11)
-	_test_suit("(sqrt(36) + log(100)) × 2", True, 22)
+	_test_suit("sqrt(9) + log(100)", True, 5)
+	_test_suit("(sqrt(36) + log(100)) × 2", True, 16)
 	_test_suit("log(1)", True, 0)
-	_test_suit("(sqrt(49) - log(10)) × 2", True, 6)
-	_test_suit("(sqrt(64) + log(1000)) ÷ 2", True, 8.5)
-	_test_suit("sqrt(log(100))", True, 1)
+	_test_suit("(sqrt(49) - log(10)) × 2", True, 12)
+	_test_suit("(sqrt(64) + log(1000)) ÷ 2", True, 5.5)
+	_test_suit("sqrt(log(100))", True, 1.414213562373095)
 
 	_test_suit("-2 + 3", True, 1)
 	_test_suit("-5 - (-3)", True, -2)
@@ -73,7 +73,7 @@ def test_eval() -> None:
 	_test_suit("(sqrt(1000000))", True, 1000)
 	_test_suit("(2000000 ÷ (500)) × (20)", True, 80000)
 	_test_suit("(100000 ^ (1÷5))", True, 10)
-	_test_suit("(999999 + log(100))", True, 100001)
+	_test_suit("(999999 + log(100))", True, 1000001)
 
 	_test_suit("2.5 + 3.5", True, 6)
 	_test_suit("7.75 - 2.75", True, 5)
@@ -86,14 +86,14 @@ def test_eval() -> None:
 	_test_suit("(0.5 + 0.5) ^ 2", True, 1)
 	_test_suit("(log(100) + log(10))", True, 3)
 
-	_test_suit("(1 + (2 + 3)) × (4 - 1)", True, 15)
+	_test_suit("(1 + (2 + 3)) × (4 - 1)", True, 18)
 	_test_suit("(2 × (3 + (4 - 1)))", True, 12)
-	_test_suit("(5 + (6 ÷ (1 + 1))) ^ 2", True, 121)
+	_test_suit("(5 + (6 ÷ (1 + 1))) ^ 2", True, 64)
 	_test_suit("(log(10) × (2 + 3))", True, 5)
 	_test_suit("(sqrt((16))) + (log(100))", True, 6)
-	_test_suit("(10 - (2 × (3 - (1)))) ^ 2", True, 64)
-	_test_suit("(sqrt((9) + (16))) ^ (1÷2)", True, 5)
-	_test_suit("(log(100) + log(1000)) ÷ log(10)", True, 4)
+	_test_suit("(10 - (2 × (3 - (1)))) ^ 2", True, 36)
+	_test_suit("(sqrt((9) + (16))) ^ (1÷2)", True, 2.23606797749979)
+	_test_suit("(log(100) + log(1000)) ÷ log(10)", True, 5)
 	_test_suit("(10 ÷ (5 - (3))) ^ (2)", True, 25)
 	_test_suit("(sqrt((4^2) + (3^2)))", True, 5)
 
@@ -108,12 +108,12 @@ def test_eval() -> None:
 	_test_suit("log(-10)", False)
 	_test_suit("1÷0", False)
 
-	_test_suit("(3 + sqrt(16)) × log(100)", True, 20)
-	_test_suit("(5 ^ 2) + ((3 × 4) ÷ log(100))", True, 37)
+	_test_suit("(3 + sqrt(16)) × log(100)", True, 14)
+	_test_suit("(5 ^ 2) + ((3 × 4) ÷ log(100))", True, 31)
 	_test_suit("(8 ÷ sqrt(4)) - log(10)", True, 3)
-	_test_suit("(5^2 - log(100)) × sqrt(36)", True, 30)
-	_test_suit("(10 × log(10000)) ÷ sqrt(25)", True, 40)
-	_test_suit("(7 - sqrt(49) + log(100)) × (6 ÷ 3)", True, 12)
+	_test_suit("(5^2 - log(100)) × sqrt(36)", True, 138)
+	_test_suit("(10 × log(10000)) ÷ sqrt(25)", True, 8)
+	_test_suit("(7 - sqrt(49) + log(100)) × (6 ÷ 3)", True, 4)
 	_test_suit("(8 + (log(100) × sqrt(16))) ^ (1÷2)", True, 4)
 	_test_suit("(15 ÷ (log(100))) + sqrt((4^2) - (16))", True, 7.5)
 	_test_suit("(log(100) - sqrt(9)) × (5 + sqrt(16))", True, -9)
@@ -167,6 +167,10 @@ def test_eval() -> None:
 
 	_test_suit("(5 % 3) + (10 ÷÷ 2)", False)
 	_test_suit("1000e.0000", False)
+	_test_suit("1000.e0000", True, 1000)
+	_test_suit("1000.e-123", True)
+	_test_suit("100e0.-123", False)
+	_test_suit("1000.-123", True, 877.0)
 	_test_suit("(sin(90) + log(100, 10))", False)
 	_test_suit("(exp(1) - sqrt(4)) × (10 & 5)", False)
 	_test_suit("(5 ×× 2) ÷ (log(100, 10))", False)
