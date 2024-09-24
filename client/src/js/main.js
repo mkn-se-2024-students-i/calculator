@@ -17,7 +17,7 @@ const replaceOperators = (input) => {
   .replace(/\//g, "÷")
 }
 
-calculatorClearButton.addEventListener("click", ()=> {
+calculatorClearButton.addEventListener("click", () => {
   calculatorFormInput.value = ""
   calculatorForm.classList.remove("error")
 })
