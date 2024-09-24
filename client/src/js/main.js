@@ -1,5 +1,6 @@
 import "../css/style.css"
 import "../css/background-animation.css"
+import "../css/stylesheet.css"
 
 const app = document.getElementById("app")
 const btnScreenScrollers = document.querySelectorAll(".screen__btn")
