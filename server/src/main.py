@@ -48,7 +48,7 @@ async def handler(websocket):
                 write_new_result(user, expr, result, db_connections)
                 if ok:
                     await websocket.send(json.dumps({"type" : Message_Types.eval_expr.name, "user": user, "expr": expr, "result" : result}))
-                    await broadcast_to_user(user, json.dumps({"type": Message_Types.update.name, "user": user, "data": "you need to update"})) 
+                    await broadcast_to_user(user, json.dumps({"type": Message_Types.update.name, "user": user, "expr": expr, "result" : result}))
                 else:
                     await websocket.send(json.dumps({"type" : Message_Types.eval_expr.name, "user": user, "result" : "error", "error" : result}))
             elif data["type"] == Message_Types.get_history.name:

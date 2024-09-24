@@ -3,6 +3,7 @@ import "../css/background-animation.css"
 
 const app = document.getElementById("app")
 const btnScreenScrollers = document.querySelectorAll(".screen__btn")
+const historyList = document.querySelectorAll(".history__list")
 const historyItems = document.querySelectorAll(".history__item")
 const screenHome = document.querySelector(".screen_home") 
 
@@ -14,30 +15,46 @@ const calculatorFormInput = calculatorForm.querySelector("input[name='calculator
 calculatorClearButton.addEventListener("click", removeLastCalculatorSymbol)
 calculatorFormInput.addEventListener("input",  () => calculatorForm.classList.remove("error"))
 
-const ws = new WebSocket("ws://84.201.143.213:5000"); // it seems like for virtual ip = 10.129.0.15 but it starts endless connecting
-const global_user = 100500; //TODO: it is for tests, move it to localStorage
+const ws = new WebSocket("ws://84.201.143.213:5000");
+var globalUser = null;
 
 ws.onopen = () => {
   console.log("WebSocket connection opened");
+  
+  userId = localStorage.getItem("user_id");
+  if (userId == null) {
+    userId = uuidv4();
+    localStorage.setItem("user_id", userId);
+  } else {
+    getHistory(userId);
+  }
+  globalUser = userId;
 };
 
 ws.onmessage = (event) => {
   const message = JSON.parse(event.data);
 
   // honestly, other user could be only if we have some mistakes on server side
-  if (message.user == global_user) {
-    //TODO: handle functions result here
+  if (message.user == globalUser) {
     if (message.type == 'update') { // this is trigger from backend that in some tab you ask for eval and you need to update history
+      addNewElementToHistory(message.expr, message.ans);
       console.log("We need to update history list for this user");
+      console.log(historyItems);
     } else if (message.type == "eval_expr") { // this is response on evalExpr function
-      //TODO: should check somehow that it is answer for your expr
       if (message.result != "error") {
+        calculatorFormInput.value = message.result
         console.log(message.result + " is valid result for expr = " + message.expr);
       } else {
+        calculatorForm.classList.add("error");
         console.log("Got error while evaluate expr: " + message.error);
       }
-    } else if (response.type == "get_history") { // this is response on getHistory function
+      console.log(historyItems);
+    } else if (message.type == "get_history") { // this is response on getHistory function
       console.log("whole history for our user = " + response.result);
+      message.result.forEach(elem => {
+        addNewElementToHistory(elem.request, elem.result);
+      })
+      console.log(historyItems);
     } else {
       console.log("Unknown message type");
     }
@@ -93,8 +110,7 @@ calculatorForm.addEventListener("submit", (e) => {
     return
   }
 
-  evalExpr(global_user, calculatorFormInput.value)
-  calculatorFormInput.value = ''
+  evalExpr(globalUser, calculatorFormInput.value)
 })
 
 function validateInput() {
@@ -159,6 +175,32 @@ let touchendX = 0
     
 function checkDirection() {
   if (touchendX > touchstartX) removeLastCalculatorSymbol()
+}
+
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+  .replace(/[xy]/g, function (c) {
+      const r = Math.random() * 16 | 0; 
+      const v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+  });
+}
+
+function addNewElementToHistory(expr, ans) {
+  const newRecord = document.createElement('li');
+  newRecord.className = 'history__item';
+
+  const answerSpan = document.createElement('span');
+  answerSpan.className = 'history__item-answer';
+  answerSpan.textContent = ans;
+
+  const requestParagraph = document.createElement('p');
+  requestParagraph.className = 'history__item-request';
+  requestParagraph.textContent = expr;
+
+  newRecord.appendChild(answerSpan);
+  newRecord.appendChild(requestParagraph);
+  historyList.appendChild(newRecord);
 }
 
 calculatorDisplay.addEventListener('touchstart', e => {
