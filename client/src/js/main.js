@@ -13,7 +13,10 @@ const calculatorClearButton = document.querySelector(".calculator__button.remove
 const calculatorFormInput = calculatorForm.querySelector("input[name='calculator-request']")
 
 calculatorClearButton.addEventListener("click", removeLastCalculatorSymbol)
-calculatorFormInput.addEventListener("input",  () => calculatorForm.classList.remove("error"))
+calculatorFormInput.addEventListener("input", function() {
+  calculatorForm.classList.remove("error")
+  calculatorFormInput.value = replaceOperators(calculatorFormInput.value)
+})
 
 const ws = new WebSocket("ws://84.201.143.213:5000");
 var globalUser = null;
