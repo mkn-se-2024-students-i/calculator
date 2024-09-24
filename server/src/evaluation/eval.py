@@ -2,9 +2,9 @@ import regex as re
 import math
 
 # TODO: add "sin", "cos", "tan", "e", "pi"
-_correct_elements_regexp = "([\× \- \+ \÷ \d \s \. \^ \( \)]*(log)*(sqrt)*)*"
+_correct_elements_regexp = "([\× \- \+ \÷ \d \s \. \^ \( \)]*(log)*(sqrt)*(e)*)*"
 
-_operation_replacements = [("log", "math.log"), ("sqrt", "math.sqrt"), ("^", "**"), ("×", "*"), ("÷", "/") ]
+_operation_replacements = [("log", "math.log10"), ("sqrt", "math.sqrt"), ("^", "**"), ("×", "*"), ("÷", "/") ]
 
 _invalid_string = "inval"
 _invalid_patterns = ["\+\s*\+", "-\s*-", "\×\s*\×", "÷\s*÷"]
