@@ -209,7 +209,7 @@ calculatorDisplay.addEventListener('touchend', e => {
   checkDirection()
 })
 
-// TODO: навесить обработку клика для каждого нового добавленного элемента
+// TODO: add same handling for each new history record
 historyItems.forEach(item => {
   item.addEventListener("click", () => {
     const itemRequest = item.querySelector(".history__item-request")
