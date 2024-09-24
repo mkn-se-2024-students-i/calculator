@@ -13,7 +13,7 @@ const calculatorClearButton = document.querySelector(".calculator__button.remove
 const calculatorFormInput = calculatorForm.querySelector("input[name='calculator-request']")
 
 calculatorClearButton.addEventListener("click", removeLastCalculatorSymbol)
-calculatorFormInput.addEventListener("input",  function() {
+calculatorFormInput.addEventListener("input", function() {
   calculatorForm.classList.remove("error")
   calculatorFormInput.value = replaceOperators(calculatorFormInput.value)
 })
