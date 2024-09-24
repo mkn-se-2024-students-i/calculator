@@ -185,14 +185,14 @@ function uuidv4() {
 
 function addNewElementToHistory(expr, answer) {
   const newRecord = document.createElement('li');
-  newRecord.className.add('history__item');
+  newRecord.classList.add('history__item');
 
   const answerSpan = document.createElement('span');
-  answerSpan.className.add('history__item-answer');
+  answerSpan.classList.add('history__item-answer');
   answerSpan.textContent = answer;
 
   const requestParagraph = document.createElement('p');
-  requestParagraph.className.add('history__item-request');
+  requestParagraph.classList.add('history__item-request');
   requestParagraph.textContent = expr;
 
   newRecord.appendChild(answerSpan);
