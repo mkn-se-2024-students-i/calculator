@@ -11,8 +11,12 @@ TABLE_NAME = "requests"
 
 DB_FIELDS_NAMES = ["websocket_key", "timestamp", "request", "result"]
 
-DBResult = namedtuple("DBResult", " ".join(DB_FIELDS_NAMES))
+def _get_only_serialiazble_fields() -> list[str]:
+    result = DB_FIELDS_NAMES.copy()
+    result.remove(DB_FIELDS_NAMES[1])
+    return result
 
+DBResult = namedtuple("DBResult", " ".join(_get_only_serialiazble_fields()))
 
 def get_database_connections_pool(
     pool_size: int,
@@ -94,7 +98,7 @@ def get_all_user_requests(
         cursor = connection.cursor()
 
         search_query = f"""
-        SELECT {",".join(DB_FIELDS_NAMES)} FROM {TABLE_NAME} WHERE websocket_key = %s order by timestamp
+        SELECT {",".join(_get_only_serialiazble_fields())} FROM {TABLE_NAME} WHERE websocket_key = %s order by timestamp
         """
         cursor.execute(search_query, (key,))
 
