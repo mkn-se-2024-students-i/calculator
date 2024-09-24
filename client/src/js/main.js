@@ -189,11 +189,11 @@ function addNewElementToHistory(expr, answer) {
 
   const answerSpan = document.createElement('span');
   answerSpan.classList.add('history__item-answer');
-  answerSpan.textContent = answer;
+  answerSpan.innerHTML = answer;
 
   const requestParagraph = document.createElement('p');
   requestParagraph.classList.add('history__item-request');
-  requestParagraph.textContent = expr;
+  requestParagraph.innerHTML = expr;
 
   newRecord.appendChild(answerSpan);
   newRecord.appendChild(requestParagraph);
@@ -209,6 +209,7 @@ calculatorDisplay.addEventListener('touchend', e => {
   checkDirection()
 })
 
+// TODO: add same handling for each new history record
 historyItems.forEach(item => {
   item.addEventListener("click", () => {
     const itemRequest = item.querySelector(".history__item-request")
