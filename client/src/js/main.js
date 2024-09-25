@@ -93,7 +93,9 @@ function removeLastCalculatorSymbol() {
 
 function calculatorInputOnFocus() {
   calculatorFormInput.scrollLeft = calculatorFormInput.scrollWidth
-  calculatorFormInput.focus()
+  if(!navigator.userAgentData.mobile) {
+    calculatorFormInput.focus()
+  }
 }
 
 btnScreenScrollers.forEach(btn => {
