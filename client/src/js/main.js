@@ -99,7 +99,9 @@ function removeLastCalculatorSymbol() {
 function calculatorInputOnFocus() {
   calculatorFormInput.scrollLeft = calculatorFormInput.scrollWidth
   if(windowWidth < 1200) {
-    calculatorFormInput.focus()
+    setTimeout(() => {
+      calculatorFormInput.focus()
+    }, 1000)
   }
 }
 
@@ -136,8 +138,7 @@ function handleHistoryRecordClick(item) {
   item.addEventListener("click", () => {
     const itemRequest = item.querySelector(".history__item-request")
     calculatorFormInput.value = itemRequest.innerText
-    calculatorInputOnFocus()
-    
+
     app.scrollTo({
       top: 0,
       left: screenHome.offsetLeft,
@@ -148,6 +149,8 @@ function handleHistoryRecordClick(item) {
       calculatorFormInput.focus()
     }, 1000)
   })
+
+  calculatorInputOnFocus()
 }
 
 function validateInput() {
