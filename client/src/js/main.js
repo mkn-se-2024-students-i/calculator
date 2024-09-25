@@ -145,12 +145,8 @@ function handleHistoryRecordClick(item) {
       behavior: 'smooth'
     })
 
-    setTimeout(() => {
-      calculatorFormInput.focus()
-    }, 1000)
+    calculatorInputOnFocus()
   })
-
-  calculatorInputOnFocus()
 }
 
 function validateInput() {
