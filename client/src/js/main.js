@@ -98,7 +98,7 @@ function removeLastCalculatorSymbol() {
 
 function calculatorInputOnFocus() {
   calculatorFormInput.scrollLeft = calculatorFormInput.scrollWidth
-  if(windowWidth < 1200) {
+  if(windowWidth > 1200) {
     setTimeout(() => {
       calculatorFormInput.focus()
     }, 1000)
