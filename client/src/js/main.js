@@ -7,11 +7,16 @@ const btnScreenScrollers = document.querySelectorAll(".screen__btn")
 const historyList = document.querySelector(".history__list")
 const historyItems = document.querySelectorAll(".history__item")
 const screenHome = document.querySelector(".screen_home") 
+let windowWidth = window.innerWidth
 
 const calculatorForm = document.querySelector(".calculator-form")
 const calculatorButtons = document.querySelectorAll(".calculator__button[data-button-symbol]")
 const calculatorClearButton = document.querySelector(".calculator__button.remove-last-symbol")
 const calculatorFormInput = calculatorForm.querySelector("input[name='calculator-request']")
+
+window.addEventListener('resize', function () {
+  windowWidth = window.innerWidth
+})
 
 const replaceOperators = (input) => {
   return input.replace(/\*/g, "×")
@@ -93,7 +98,7 @@ function removeLastCalculatorSymbol() {
 
 function calculatorInputOnFocus() {
   calculatorFormInput.scrollLeft = calculatorFormInput.scrollWidth
-  if(!navigator.userAgentData.mobile) {
+  if(windowWidth < 1200) {
     calculatorFormInput.focus()
   }
 }
